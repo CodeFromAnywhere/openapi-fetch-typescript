@@ -2,7 +2,7 @@
   "name": "openapi-fetch-typescript",
   "type": "module",
   "main": "build/index.js",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "scripts": {
     "test": "node build/generateTypescriptSdk.cli.js openapi.json",
     "tsc": "tsc",
@@ -14,6 +14,7 @@
     "typescript": "^5.0.0"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/web": "^0.0.111",
     "bun-types": "latest"
   },
@@ -23,6 +24,7 @@
     "openapi-fetch-typescript": "build/generateTypescriptSdk.cli.js"
   },
   "dependencies": {
+    "js-yaml": "^4.1.0",
     "openapi-typescript": "^7.0.0-next.5"
   },
   "operation": {
