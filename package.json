@@ -2,7 +2,7 @@
   "name": "openapi-fetch-typescript",
   "type": "module",
   "main": "build/index.js",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "scripts": {
     "test": "node build/generateTypescriptSdk.cli.js openapi.json",
     "tsc": "tsc",
