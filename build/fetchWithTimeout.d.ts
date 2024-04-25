@@ -1,6 +1,3 @@
-/// <reference types="web" />
-/// <reference types="bun-types" />
-/// <reference types="node" />
 /**
  * Sets timeout to 5 minutes by default
  *
