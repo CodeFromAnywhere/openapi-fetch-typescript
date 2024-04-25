@@ -1,4 +1,4 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 
 import fs from "node:fs";
 import { generateTypescriptSdk } from "./generateTypescriptSdk.js";
@@ -26,8 +26,8 @@ const cli = async () => {
   const absolutePath = pathToOutputFile?.startsWith("/")
     ? pathToOutputFile
     : pathToOutputFile
-      ? path.join(cwd, pathToOutputFile)
-      : path.join(cwd, "types.ts");
+    ? path.join(cwd, pathToOutputFile)
+    : path.join(cwd, "types.ts");
 
   const absoluteFolderPath = path.parse(absolutePath).dir;
 
