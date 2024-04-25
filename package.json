@@ -1,0 +1,32 @@
+{
+  "name": "openapi-fetch-typescript",
+  "type": "module",
+  "main": "build/index.js",
+  "version": "0.0.6",
+  "scripts": {
+    "test": "node build/generateTypescriptSdk.cli.js openapi.json",
+    "tsc": "tsc",
+    "dev": "npx tsc-watch",
+    "up": "npm version patch -f",
+    "pub": "npm run up && npm publish"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/web": "^0.0.111",
+    "bun-types": "latest"
+  },
+  "license": "ISC",
+  "description": "Generate a nice typescript SDK from any OpenAPI",
+  "bin": {
+    "openapi-fetch-typescript": "build/generateTypescriptSdk.cli.js"
+  },
+  "dependencies": {
+    "openapi-typescript": "^7.0.0-next.5"
+  },
+  "operation": {
+    "lastRebuildAt": 1713430966351,
+    "isBuildSuccessful": true
+  }
+}

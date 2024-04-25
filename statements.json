@@ -1,0 +1,2782 @@
+[
+  {
+    "modelName": "SwcVariable",
+    "name": "openapis",
+    "start": 106,
+    "end": 155,
+    "length": 49,
+    "raw": "const openapis: { [url: string]: OpenAPI3 } = {};",
+    "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/fetchOpenapi.ts",
+    "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/fetchOpenapi.ts",
+    "isExported": false,
+    "packageCategory": "actionschema",
+    "packageName": "openapi-fetch-typescript",
+    "operationClassification": "cjs"
+  },
+  {
+    "modelName": "SwcFunction",
+    "name": "fetchOpenapi",
+    "start": 195,
+    "end": 832,
+    "length": 637,
+    "raw": "export const fetchOpenapi = async (openapiUrl: string | undefined) => {\n  if (!openapiUrl) {\n    return;\n  }\n\n  if (openapis[openapiUrl]) {\n    // NB: cached in memory\n    return openapis[openapiUrl];\n  }\n\n  const isYaml = openapiUrl.endsWith(\".yaml\");\n\n  const { json, status, statusText, text } = await fetchWithTimeout<OpenAPI3>(\n    openapiUrl,\n    {\n      headers: isYaml\n        ? undefined\n        : {\n            Accept: \"application/json\",\n            \"Content-Type\": \"application/json\",\n          },\n    },\n    30000,\n  );\n\n  if (json) {\n    // NB: set cache\n    openapis[openapiUrl] = json;\n  }\n\n  return json || undefined;\n};",
+    "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/fetchOpenapi.ts",
+    "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/fetchOpenapi.ts",
+    "isExported": true,
+    "packageCategory": "actionschema",
+    "packageName": "openapi-fetch-typescript",
+    "operationClassification": "cjs",
+    "returnType": {},
+    "otherDefs": {},
+    "namedParameters": {
+      "modelName": "SchemaItem",
+      "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/fetchOpenapi.ts",
+      "name": "NamedParameters<typeof fetchOpenapi>",
+      "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/fetchOpenapi.ts",
+      "operationRelativePath": "src/fetchOpenapi.ts",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$ref": "#/definitions/NamedParameters%3Ctypeof%20fetchOpenapi%3E",
+        "definitions": {
+          "NamedParameters<typeof fetchOpenapi>": {
+            "type": "object",
+            "properties": {
+              "openapiUrl": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "parameters": [
+      {
+        "name": "openapiUrl",
+        "schema": {
+          "type": "string"
+        },
+        "simplifiedSchema": {
+          "type": "string"
+        },
+        "required": false
+      }
+    ]
+  },
+  {
+    "modelName": "SwcFunction",
+    "name": "fetchWithTimeout",
+    "start": 260,
+    "end": 745,
+    "length": 485,
+    "raw": "export const fetchWithTimeout = async <T extends any>(\n  input: string | Request | URL,\n  init?: RequestInit,\n  timeoutMs?: number,\n  isNoJson?: boolean,\n  isNoText?: boolean,\n) => {\n  const { status, statusText, text, response } = await fetchTextWithTimeout(\n    input,\n    init,\n    timeoutMs,\n    isNoText,\n  );\n  const json =\n    text && !isNoJson\n      ? tryParseJson<T>(text) || tryParseYamlToJson<T>(text)\n      : null;\n\n  return { text, json, status, statusText, response };\n};",
+    "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/fetchWithTimeout.ts",
+    "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/fetchWithTimeout.ts",
+    "isExported": true,
+    "packageCategory": "actionschema",
+    "packageName": "openapi-fetch-typescript",
+    "operationClassification": "cjs",
+    "returnType": {},
+    "otherDefs": {
+      "Request": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/ReadableStream%3CUint8Array%3E"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/body)"
+          },
+          "bodyUsed": {
+            "type": "boolean",
+            "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/bodyUsed)"
+          },
+          "cache": {
+            "$ref": "#/definitions/RequestCache",
+            "description": "Returns the cache mode associated with request, which is a string indicating how the request will interact with the browser's cache when fetching.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/cache)"
+          },
+          "credentials": {
+            "$ref": "#/definitions/RequestCredentials",
+            "description": "Returns the credentials mode associated with request, which is a string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/credentials)"
+          },
+          "destination": {
+            "$ref": "#/definitions/RequestDestination",
+            "description": "Returns the kind of resource requested by request, e.g., \"document\" or \"script\".\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/destination)"
+          },
+          "headers": {
+            "$ref": "#/definitions/Headers",
+            "description": "Returns a Headers object consisting of the headers associated with request. Note that headers added in the network layer by the user agent will not be accounted for in this object, e.g., the \"Host\" header.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/headers)"
+          },
+          "integrity": {
+            "type": "string",
+            "description": "Returns request's subresource integrity metadata, which is a cryptographic hash of the resource being fetched. Its value consists of multiple hashes separated by whitespace. [SRI]\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/integrity)"
+          },
+          "keepalive": {
+            "type": "boolean",
+            "description": "Returns a boolean indicating whether or not request can outlive the global in which it was created.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/keepalive)"
+          },
+          "method": {
+            "type": "string",
+            "description": "Returns request's HTTP method, which is \"GET\" by default.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/method)"
+          },
+          "mode": {
+            "$ref": "#/definitions/RequestMode",
+            "description": "Returns the mode associated with request, which is a string indicating whether the request will use CORS, or will be restricted to same-origin URLs.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/mode)"
+          },
+          "redirect": {
+            "$ref": "#/definitions/RequestRedirect",
+            "description": "Returns the redirect mode associated with request, which is a string indicating how redirects for the request will be handled during fetching. A request will follow redirects by default.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/redirect)"
+          },
+          "referrer": {
+            "type": "string",
+            "description": "Returns the referrer of request. Its value can be a same-origin URL if explicitly set in init, the empty string to indicate no referrer, and \"about:client\" when defaulting to the global's default. This is used during fetching to determine the value of the `Referer` header of the request being made.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/referrer)"
+          },
+          "referrerPolicy": {
+            "$ref": "#/definitions/ReferrerPolicy",
+            "description": "Returns the referrer policy associated with request. This is used during fetching to compute the value of the request's referrer.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/referrerPolicy)"
+          },
+          "signal": {
+            "$ref": "#/definitions/AbortSignal",
+            "description": "Returns the signal associated with request, which is an AbortSignal object indicating whether or not request has been aborted, and its abort event handler.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/signal)"
+          },
+          "url": {
+            "type": "string",
+            "description": "Returns the URL of request as a string.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/url)"
+          }
+        },
+        "required": [
+          "body",
+          "bodyUsed",
+          "cache",
+          "credentials",
+          "destination",
+          "headers",
+          "integrity",
+          "keepalive",
+          "method",
+          "mode",
+          "redirect",
+          "referrer",
+          "referrerPolicy",
+          "signal",
+          "url"
+        ],
+        "additionalProperties": false,
+        "description": "This Fetch API interface represents a resource request.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request)"
+      },
+      "ReadableStream<Uint8Array>": {
+        "type": "object",
+        "properties": {
+          "locked": {
+            "type": "boolean",
+            "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/locked)"
+          }
+        },
+        "required": [
+          "locked"
+        ],
+        "additionalProperties": false,
+        "description": "This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream)"
+      },
+      "RequestCache": {
+        "type": "string",
+        "enum": [
+          "default",
+          "force-cache",
+          "no-cache",
+          "no-store",
+          "only-if-cached",
+          "reload"
+        ]
+      },
+      "RequestCredentials": {
+        "type": "string",
+        "enum": [
+          "include",
+          "omit",
+          "same-origin"
+        ]
+      },
+      "RequestDestination": {
+        "type": "string",
+        "enum": [
+          "",
+          "audio",
+          "audioworklet",
+          "document",
+          "embed",
+          "font",
+          "frame",
+          "iframe",
+          "image",
+          "manifest",
+          "object",
+          "paintworklet",
+          "report",
+          "script",
+          "sharedworker",
+          "style",
+          "track",
+          "video",
+          "worker",
+          "xslt"
+        ]
+      },
+      "Headers": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "RequestMode": {
+        "type": "string",
+        "enum": [
+          "cors",
+          "navigate",
+          "no-cors",
+          "same-origin"
+        ]
+      },
+      "RequestRedirect": {
+        "type": "string",
+        "enum": [
+          "error",
+          "follow",
+          "manual"
+        ]
+      },
+      "ReferrerPolicy": {
+        "type": "string",
+        "enum": [
+          "",
+          "no-referrer",
+          "no-referrer-when-downgrade",
+          "origin",
+          "origin-when-cross-origin",
+          "same-origin",
+          "strict-origin",
+          "strict-origin-when-cross-origin",
+          "unsafe-url"
+        ]
+      },
+      "AbortSignal": {
+        "type": "object",
+        "properties": {
+          "aborted": {
+            "type": "boolean",
+            "description": "Returns true if this AbortSignal's AbortController has signaled to abort, and false otherwise."
+          },
+          "reason": {},
+          "onabort": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "isFunction": {
+                    "type": "boolean",
+                    "const": true
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "required": [
+          "aborted",
+          "reason",
+          "onabort"
+        ],
+        "additionalProperties": false,
+        "description": "A signal object that allows you to communicate with a DOM request (such as a Fetch) and abort it if required via an AbortController object."
+      },
+      "RequestInit": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/BodyInit"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A BodyInit object or null to set request's body."
+          },
+          "cache": {
+            "$ref": "#/definitions/RequestCache",
+            "description": "A string indicating how the request will interact with the browser's cache to set request's cache."
+          },
+          "credentials": {
+            "$ref": "#/definitions/RequestCredentials",
+            "description": "A string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL. Sets request's credentials."
+          },
+          "headers": {
+            "$ref": "#/definitions/HeadersInit",
+            "description": "A Headers object, an object literal, or an array of two-item arrays to set request's headers."
+          },
+          "integrity": {
+            "type": "string",
+            "description": "A cryptographic hash of the resource to be fetched by request. Sets request's integrity."
+          },
+          "keepalive": {
+            "type": "boolean",
+            "description": "A boolean to set request's keepalive."
+          },
+          "method": {
+            "type": "string",
+            "description": "A string to set request's method."
+          },
+          "mode": {
+            "$ref": "#/definitions/RequestMode",
+            "description": "A string to indicate whether the request will use CORS, or will be restricted to same-origin URLs. Sets request's mode."
+          },
+          "redirect": {
+            "$ref": "#/definitions/RequestRedirect",
+            "description": "A string indicating whether request follows redirects, results in an error upon encountering a redirect, or returns the redirect (in an opaque fashion). Sets request's redirect."
+          },
+          "referrer": {
+            "type": "string",
+            "description": "A string whose value is a same-origin URL, \"about:client\", or the empty string, to set request's referrer."
+          },
+          "referrerPolicy": {
+            "$ref": "#/definitions/ReferrerPolicy",
+            "description": "A referrer policy to set request's referrerPolicy."
+          },
+          "signal": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/AbortSignal"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "An AbortSignal to set request's signal."
+          },
+          "window": {
+            "type": "null",
+            "description": "Can only be null. Used to disassociate request from any Window."
+          }
+        },
+        "additionalProperties": false
+      },
+      "BodyInit": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/ReadableStream"
+          },
+          {
+            "$ref": "#/definitions/XMLHttpRequestBodyInit"
+          }
+        ]
+      },
+      "ReadableStream": {
+        "type": "object",
+        "properties": {
+          "locked": {
+            "type": "boolean",
+            "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/locked)"
+          }
+        },
+        "required": [
+          "locked"
+        ],
+        "additionalProperties": false,
+        "description": "This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream)"
+      },
+      "XMLHttpRequestBodyInit": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/Blob"
+          },
+          {
+            "$ref": "#/definitions/BufferSource"
+          },
+          {
+            "$ref": "#/definitions/FormData"
+          },
+          {
+            "$ref": "#/definitions/URLSearchParams"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "Blob": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "number",
+            "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/size)"
+          },
+          "type": {
+            "type": "string",
+            "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/type)"
+          }
+        },
+        "required": [
+          "size",
+          "type"
+        ],
+        "additionalProperties": false,
+        "description": "A file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob)"
+      },
+      "BufferSource": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/ArrayBufferView"
+          },
+          {
+            "$ref": "#/definitions/ArrayBuffer"
+          }
+        ]
+      },
+      "ArrayBufferView": {
+        "type": "object",
+        "properties": {
+          "buffer": {
+            "$ref": "#/definitions/ArrayBufferLike"
+          },
+          "byteLength": {
+            "type": "number"
+          },
+          "byteOffset": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "buffer",
+          "byteLength",
+          "byteOffset"
+        ],
+        "additionalProperties": false
+      },
+      "ArrayBufferLike": {
+        "$ref": "#/definitions/ArrayBuffer"
+      },
+      "ArrayBuffer": {
+        "type": "object",
+        "properties": {
+          "byteLength": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "byteLength"
+        ],
+        "additionalProperties": false
+      },
+      "FormData": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "URLSearchParams": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "HeadersInit": {
+        "anyOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          {
+            "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
+          },
+          {
+            "$ref": "#/definitions/Headers"
+          }
+        ]
+      },
+      "Record<string,string>": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "namedParameters": {
+      "modelName": "SchemaItem",
+      "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/fetchWithTimeout.ts",
+      "name": "NamedParameters<typeof fetchWithTimeout>",
+      "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/fetchWithTimeout.ts",
+      "operationRelativePath": "src/fetchWithTimeout.ts",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$ref": "#/definitions/NamedParameters%3Ctypeof%20fetchWithTimeout%3E",
+        "definitions": {
+          "NamedParameters<typeof fetchWithTimeout>": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/definitions/Request"
+                  },
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                ]
+              },
+              "init": {
+                "$ref": "#/definitions/RequestInit"
+              },
+              "timeoutMs": {
+                "type": "number"
+              },
+              "isNoJson": {
+                "type": "boolean"
+              },
+              "isNoText": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "input"
+            ],
+            "additionalProperties": false
+          },
+          "Request": {
+            "type": "object",
+            "properties": {
+              "body": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/ReadableStream%3CUint8Array%3E"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/body)"
+              },
+              "bodyUsed": {
+                "type": "boolean",
+                "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/bodyUsed)"
+              },
+              "cache": {
+                "$ref": "#/definitions/RequestCache",
+                "description": "Returns the cache mode associated with request, which is a string indicating how the request will interact with the browser's cache when fetching.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/cache)"
+              },
+              "credentials": {
+                "$ref": "#/definitions/RequestCredentials",
+                "description": "Returns the credentials mode associated with request, which is a string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/credentials)"
+              },
+              "destination": {
+                "$ref": "#/definitions/RequestDestination",
+                "description": "Returns the kind of resource requested by request, e.g., \"document\" or \"script\".\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/destination)"
+              },
+              "headers": {
+                "$ref": "#/definitions/Headers",
+                "description": "Returns a Headers object consisting of the headers associated with request. Note that headers added in the network layer by the user agent will not be accounted for in this object, e.g., the \"Host\" header.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/headers)"
+              },
+              "integrity": {
+                "type": "string",
+                "description": "Returns request's subresource integrity metadata, which is a cryptographic hash of the resource being fetched. Its value consists of multiple hashes separated by whitespace. [SRI]\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/integrity)"
+              },
+              "keepalive": {
+                "type": "boolean",
+                "description": "Returns a boolean indicating whether or not request can outlive the global in which it was created.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/keepalive)"
+              },
+              "method": {
+                "type": "string",
+                "description": "Returns request's HTTP method, which is \"GET\" by default.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/method)"
+              },
+              "mode": {
+                "$ref": "#/definitions/RequestMode",
+                "description": "Returns the mode associated with request, which is a string indicating whether the request will use CORS, or will be restricted to same-origin URLs.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/mode)"
+              },
+              "redirect": {
+                "$ref": "#/definitions/RequestRedirect",
+                "description": "Returns the redirect mode associated with request, which is a string indicating how redirects for the request will be handled during fetching. A request will follow redirects by default.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/redirect)"
+              },
+              "referrer": {
+                "type": "string",
+                "description": "Returns the referrer of request. Its value can be a same-origin URL if explicitly set in init, the empty string to indicate no referrer, and \"about:client\" when defaulting to the global's default. This is used during fetching to determine the value of the `Referer` header of the request being made.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/referrer)"
+              },
+              "referrerPolicy": {
+                "$ref": "#/definitions/ReferrerPolicy",
+                "description": "Returns the referrer policy associated with request. This is used during fetching to compute the value of the request's referrer.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/referrerPolicy)"
+              },
+              "signal": {
+                "$ref": "#/definitions/AbortSignal",
+                "description": "Returns the signal associated with request, which is an AbortSignal object indicating whether or not request has been aborted, and its abort event handler.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/signal)"
+              },
+              "url": {
+                "type": "string",
+                "description": "Returns the URL of request as a string.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/url)"
+              }
+            },
+            "required": [
+              "body",
+              "bodyUsed",
+              "cache",
+              "credentials",
+              "destination",
+              "headers",
+              "integrity",
+              "keepalive",
+              "method",
+              "mode",
+              "redirect",
+              "referrer",
+              "referrerPolicy",
+              "signal",
+              "url"
+            ],
+            "additionalProperties": false,
+            "description": "This Fetch API interface represents a resource request.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request)"
+          },
+          "ReadableStream<Uint8Array>": {
+            "type": "object",
+            "properties": {
+              "locked": {
+                "type": "boolean",
+                "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/locked)"
+              }
+            },
+            "required": [
+              "locked"
+            ],
+            "additionalProperties": false,
+            "description": "This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream)"
+          },
+          "RequestCache": {
+            "type": "string",
+            "enum": [
+              "default",
+              "force-cache",
+              "no-cache",
+              "no-store",
+              "only-if-cached",
+              "reload"
+            ]
+          },
+          "RequestCredentials": {
+            "type": "string",
+            "enum": [
+              "include",
+              "omit",
+              "same-origin"
+            ]
+          },
+          "RequestDestination": {
+            "type": "string",
+            "enum": [
+              "",
+              "audio",
+              "audioworklet",
+              "document",
+              "embed",
+              "font",
+              "frame",
+              "iframe",
+              "image",
+              "manifest",
+              "object",
+              "paintworklet",
+              "report",
+              "script",
+              "sharedworker",
+              "style",
+              "track",
+              "video",
+              "worker",
+              "xslt"
+            ]
+          },
+          "Headers": {
+            "type": "object",
+            "additionalProperties": false
+          },
+          "RequestMode": {
+            "type": "string",
+            "enum": [
+              "cors",
+              "navigate",
+              "no-cors",
+              "same-origin"
+            ]
+          },
+          "RequestRedirect": {
+            "type": "string",
+            "enum": [
+              "error",
+              "follow",
+              "manual"
+            ]
+          },
+          "ReferrerPolicy": {
+            "type": "string",
+            "enum": [
+              "",
+              "no-referrer",
+              "no-referrer-when-downgrade",
+              "origin",
+              "origin-when-cross-origin",
+              "same-origin",
+              "strict-origin",
+              "strict-origin-when-cross-origin",
+              "unsafe-url"
+            ]
+          },
+          "AbortSignal": {
+            "type": "object",
+            "properties": {
+              "aborted": {
+                "type": "boolean",
+                "description": "Returns true if this AbortSignal's AbortController has signaled to abort, and false otherwise."
+              },
+              "reason": {},
+              "onabort": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "isFunction": {
+                        "type": "boolean",
+                        "const": true
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "required": [
+              "aborted",
+              "reason",
+              "onabort"
+            ],
+            "additionalProperties": false,
+            "description": "A signal object that allows you to communicate with a DOM request (such as a Fetch) and abort it if required via an AbortController object."
+          },
+          "RequestInit": {
+            "type": "object",
+            "properties": {
+              "body": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/BodyInit"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "A BodyInit object or null to set request's body."
+              },
+              "cache": {
+                "$ref": "#/definitions/RequestCache",
+                "description": "A string indicating how the request will interact with the browser's cache to set request's cache."
+              },
+              "credentials": {
+                "$ref": "#/definitions/RequestCredentials",
+                "description": "A string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL. Sets request's credentials."
+              },
+              "headers": {
+                "$ref": "#/definitions/HeadersInit",
+                "description": "A Headers object, an object literal, or an array of two-item arrays to set request's headers."
+              },
+              "integrity": {
+                "type": "string",
+                "description": "A cryptographic hash of the resource to be fetched by request. Sets request's integrity."
+              },
+              "keepalive": {
+                "type": "boolean",
+                "description": "A boolean to set request's keepalive."
+              },
+              "method": {
+                "type": "string",
+                "description": "A string to set request's method."
+              },
+              "mode": {
+                "$ref": "#/definitions/RequestMode",
+                "description": "A string to indicate whether the request will use CORS, or will be restricted to same-origin URLs. Sets request's mode."
+              },
+              "redirect": {
+                "$ref": "#/definitions/RequestRedirect",
+                "description": "A string indicating whether request follows redirects, results in an error upon encountering a redirect, or returns the redirect (in an opaque fashion). Sets request's redirect."
+              },
+              "referrer": {
+                "type": "string",
+                "description": "A string whose value is a same-origin URL, \"about:client\", or the empty string, to set request's referrer."
+              },
+              "referrerPolicy": {
+                "$ref": "#/definitions/ReferrerPolicy",
+                "description": "A referrer policy to set request's referrerPolicy."
+              },
+              "signal": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/AbortSignal"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "An AbortSignal to set request's signal."
+              },
+              "window": {
+                "type": "null",
+                "description": "Can only be null. Used to disassociate request from any Window."
+              }
+            },
+            "additionalProperties": false
+          },
+          "BodyInit": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/ReadableStream"
+              },
+              {
+                "$ref": "#/definitions/XMLHttpRequestBodyInit"
+              }
+            ]
+          },
+          "ReadableStream": {
+            "type": "object",
+            "properties": {
+              "locked": {
+                "type": "boolean",
+                "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/locked)"
+              }
+            },
+            "required": [
+              "locked"
+            ],
+            "additionalProperties": false,
+            "description": "This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream)"
+          },
+          "XMLHttpRequestBodyInit": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/Blob"
+              },
+              {
+                "$ref": "#/definitions/BufferSource"
+              },
+              {
+                "$ref": "#/definitions/FormData"
+              },
+              {
+                "$ref": "#/definitions/URLSearchParams"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "Blob": {
+            "type": "object",
+            "properties": {
+              "size": {
+                "type": "number",
+                "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/size)"
+              },
+              "type": {
+                "type": "string",
+                "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/type)"
+              }
+            },
+            "required": [
+              "size",
+              "type"
+            ],
+            "additionalProperties": false,
+            "description": "A file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob)"
+          },
+          "BufferSource": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/ArrayBufferView"
+              },
+              {
+                "$ref": "#/definitions/ArrayBuffer"
+              }
+            ]
+          },
+          "ArrayBufferView": {
+            "type": "object",
+            "properties": {
+              "buffer": {
+                "$ref": "#/definitions/ArrayBufferLike"
+              },
+              "byteLength": {
+                "type": "number"
+              },
+              "byteOffset": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "buffer",
+              "byteLength",
+              "byteOffset"
+            ],
+            "additionalProperties": false
+          },
+          "ArrayBufferLike": {
+            "$ref": "#/definitions/ArrayBuffer"
+          },
+          "ArrayBuffer": {
+            "type": "object",
+            "properties": {
+              "byteLength": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "byteLength"
+            ],
+            "additionalProperties": false
+          },
+          "FormData": {
+            "type": "object",
+            "additionalProperties": false
+          },
+          "URLSearchParams": {
+            "type": "object",
+            "additionalProperties": false
+          },
+          "HeadersInit": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              },
+              {
+                "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
+              },
+              {
+                "$ref": "#/definitions/Headers"
+              }
+            ]
+          },
+          "Record<string,string>": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "parameters": [
+      {
+        "name": "input",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/Request"
+            },
+            {
+              "type": "string",
+              "format": "uri"
+            }
+          ]
+        },
+        "simplifiedSchema": {
+          "properties": [],
+          "type": "object"
+        },
+        "required": true
+      },
+      {
+        "name": "init",
+        "schema": {
+          "$ref": "#/definitions/RequestInit"
+        },
+        "simplifiedSchema": {
+          "fullComment": "",
+          "properties": [
+            {
+              "name": "body",
+              "required": false,
+              "schema": {
+                "fullComment": "A BodyInit object or null to set request's body.",
+                "properties": [],
+                "type": "object"
+              }
+            },
+            {
+              "name": "cache",
+              "required": false,
+              "schema": {
+                "enum": [
+                  "default",
+                  "force-cache",
+                  "no-cache",
+                  "no-store",
+                  "only-if-cached",
+                  "reload"
+                ],
+                "fullComment": "A string indicating how the request will interact with the browser's cache to set request's cache.\n\n",
+                "type": "string"
+              }
+            },
+            {
+              "name": "credentials",
+              "required": false,
+              "schema": {
+                "enum": [
+                  "include",
+                  "omit",
+                  "same-origin"
+                ],
+                "fullComment": "A string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL. Sets request's credentials.\n\n",
+                "type": "string"
+              }
+            },
+            {
+              "name": "headers",
+              "required": false,
+              "schema": {
+                "fullComment": "A Headers object, an object literal, or an array of two-item arrays to set request's headers.\n\n",
+                "properties": [],
+                "type": "object"
+              }
+            },
+            {
+              "name": "integrity",
+              "required": false,
+              "schema": {
+                "fullComment": "A cryptographic hash of the resource to be fetched by request. Sets request's integrity.",
+                "type": "string"
+              }
+            },
+            {
+              "name": "keepalive",
+              "required": false,
+              "schema": {
+                "fullComment": "A boolean to set request's keepalive.",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "method",
+              "required": false,
+              "schema": {
+                "fullComment": "A string to set request's method.",
+                "type": "string"
+              }
+            },
+            {
+              "name": "mode",
+              "required": false,
+              "schema": {
+                "enum": [
+                  "cors",
+                  "navigate",
+                  "no-cors",
+                  "same-origin"
+                ],
+                "fullComment": "A string to indicate whether the request will use CORS, or will be restricted to same-origin URLs. Sets request's mode.\n\n",
+                "type": "string"
+              }
+            },
+            {
+              "name": "redirect",
+              "required": false,
+              "schema": {
+                "enum": [
+                  "error",
+                  "follow",
+                  "manual"
+                ],
+                "fullComment": "A string indicating whether request follows redirects, results in an error upon encountering a redirect, or returns the redirect (in an opaque fashion). Sets request's redirect.\n\n",
+                "type": "string"
+              }
+            },
+            {
+              "name": "referrer",
+              "required": false,
+              "schema": {
+                "fullComment": "A string whose value is a same-origin URL, \"about:client\", or the empty string, to set request's referrer.",
+                "type": "string"
+              }
+            },
+            {
+              "name": "referrerPolicy",
+              "required": false,
+              "schema": {
+                "enum": [
+                  "",
+                  "no-referrer",
+                  "no-referrer-when-downgrade",
+                  "origin",
+                  "origin-when-cross-origin",
+                  "same-origin",
+                  "strict-origin",
+                  "strict-origin-when-cross-origin",
+                  "unsafe-url"
+                ],
+                "fullComment": "A referrer policy to set request's referrerPolicy.\n\n",
+                "type": "string"
+              }
+            },
+            {
+              "name": "signal",
+              "required": false,
+              "schema": {
+                "fullComment": "An AbortSignal to set request's signal.",
+                "properties": [],
+                "type": "object"
+              }
+            },
+            {
+              "name": "window",
+              "required": false,
+              "schema": {
+                "fullComment": "Can only be null. Used to disassociate request from any Window.",
+                "type": "null"
+              }
+            }
+          ],
+          "type": "object"
+        },
+        "required": false
+      },
+      {
+        "name": "timeoutMs",
+        "schema": {
+          "type": "number"
+        },
+        "simplifiedSchema": {
+          "type": "number"
+        },
+        "required": false
+      },
+      {
+        "name": "isNoJson",
+        "schema": {
+          "type": "boolean"
+        },
+        "simplifiedSchema": {
+          "type": "boolean"
+        },
+        "required": false
+      },
+      {
+        "name": "isNoText",
+        "schema": {
+          "type": "boolean"
+        },
+        "simplifiedSchema": {
+          "type": "boolean"
+        },
+        "required": false
+      }
+    ]
+  },
+  {
+    "modelName": "SwcFunction",
+    "name": "fetchTextWithTimeout",
+    "start": 747,
+    "end": 1752,
+    "length": 1005,
+    "raw": "export const fetchTextWithTimeout = async (\n  input: string | Request | URL,\n  init?: RequestInit,\n  timeoutMs?: number,\n  isNoText?: boolean,\n) => {\n  try {\n    const controller = new AbortController();\n    const timeoutId = setTimeout(() => controller.abort(), timeoutMs || 300000);\n\n    const response = await fetch(input, {\n      ...init,\n      signal: controller.signal,\n    }).catch((err: any) => {\n      console.log({ err });\n      // console.log(Object.keys(err.cause));\n      return err.cause.code as string; // Error caused by fetch\n    });\n\n    clearTimeout(timeoutId);\n\n    if (typeof response === \"string\") {\n      return { statusText: response };\n    }\n\n    const status = response?.status;\n    const statusText = response?.statusText;\n    // console.log({ status, statusText });\n    const text = isNoText ? undefined : await response.text();\n\n    return { text, status, statusText, response };\n  } catch (e) {\n    return { text: undefined, status: 500, statusText: \"Catched fetch\" };\n  }\n};",
+    "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/fetchWithTimeout.ts",
+    "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/fetchWithTimeout.ts",
+    "isExported": true,
+    "packageCategory": "actionschema",
+    "packageName": "openapi-fetch-typescript",
+    "operationClassification": "cjs",
+    "returnType": {},
+    "otherDefs": {
+      "Request": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/ReadableStream%3CUint8Array%3E"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/body)"
+          },
+          "bodyUsed": {
+            "type": "boolean",
+            "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/bodyUsed)"
+          },
+          "cache": {
+            "$ref": "#/definitions/RequestCache",
+            "description": "Returns the cache mode associated with request, which is a string indicating how the request will interact with the browser's cache when fetching.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/cache)"
+          },
+          "credentials": {
+            "$ref": "#/definitions/RequestCredentials",
+            "description": "Returns the credentials mode associated with request, which is a string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/credentials)"
+          },
+          "destination": {
+            "$ref": "#/definitions/RequestDestination",
+            "description": "Returns the kind of resource requested by request, e.g., \"document\" or \"script\".\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/destination)"
+          },
+          "headers": {
+            "$ref": "#/definitions/Headers",
+            "description": "Returns a Headers object consisting of the headers associated with request. Note that headers added in the network layer by the user agent will not be accounted for in this object, e.g., the \"Host\" header.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/headers)"
+          },
+          "integrity": {
+            "type": "string",
+            "description": "Returns request's subresource integrity metadata, which is a cryptographic hash of the resource being fetched. Its value consists of multiple hashes separated by whitespace. [SRI]\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/integrity)"
+          },
+          "keepalive": {
+            "type": "boolean",
+            "description": "Returns a boolean indicating whether or not request can outlive the global in which it was created.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/keepalive)"
+          },
+          "method": {
+            "type": "string",
+            "description": "Returns request's HTTP method, which is \"GET\" by default.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/method)"
+          },
+          "mode": {
+            "$ref": "#/definitions/RequestMode",
+            "description": "Returns the mode associated with request, which is a string indicating whether the request will use CORS, or will be restricted to same-origin URLs.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/mode)"
+          },
+          "redirect": {
+            "$ref": "#/definitions/RequestRedirect",
+            "description": "Returns the redirect mode associated with request, which is a string indicating how redirects for the request will be handled during fetching. A request will follow redirects by default.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/redirect)"
+          },
+          "referrer": {
+            "type": "string",
+            "description": "Returns the referrer of request. Its value can be a same-origin URL if explicitly set in init, the empty string to indicate no referrer, and \"about:client\" when defaulting to the global's default. This is used during fetching to determine the value of the `Referer` header of the request being made.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/referrer)"
+          },
+          "referrerPolicy": {
+            "$ref": "#/definitions/ReferrerPolicy",
+            "description": "Returns the referrer policy associated with request. This is used during fetching to compute the value of the request's referrer.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/referrerPolicy)"
+          },
+          "signal": {
+            "$ref": "#/definitions/AbortSignal",
+            "description": "Returns the signal associated with request, which is an AbortSignal object indicating whether or not request has been aborted, and its abort event handler.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/signal)"
+          },
+          "url": {
+            "type": "string",
+            "description": "Returns the URL of request as a string.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/url)"
+          }
+        },
+        "required": [
+          "body",
+          "bodyUsed",
+          "cache",
+          "credentials",
+          "destination",
+          "headers",
+          "integrity",
+          "keepalive",
+          "method",
+          "mode",
+          "redirect",
+          "referrer",
+          "referrerPolicy",
+          "signal",
+          "url"
+        ],
+        "additionalProperties": false,
+        "description": "This Fetch API interface represents a resource request.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request)"
+      },
+      "ReadableStream<Uint8Array>": {
+        "type": "object",
+        "properties": {
+          "locked": {
+            "type": "boolean",
+            "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/locked)"
+          }
+        },
+        "required": [
+          "locked"
+        ],
+        "additionalProperties": false,
+        "description": "This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream)"
+      },
+      "RequestCache": {
+        "type": "string",
+        "enum": [
+          "default",
+          "force-cache",
+          "no-cache",
+          "no-store",
+          "only-if-cached",
+          "reload"
+        ]
+      },
+      "RequestCredentials": {
+        "type": "string",
+        "enum": [
+          "include",
+          "omit",
+          "same-origin"
+        ]
+      },
+      "RequestDestination": {
+        "type": "string",
+        "enum": [
+          "",
+          "audio",
+          "audioworklet",
+          "document",
+          "embed",
+          "font",
+          "frame",
+          "iframe",
+          "image",
+          "manifest",
+          "object",
+          "paintworklet",
+          "report",
+          "script",
+          "sharedworker",
+          "style",
+          "track",
+          "video",
+          "worker",
+          "xslt"
+        ]
+      },
+      "Headers": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "RequestMode": {
+        "type": "string",
+        "enum": [
+          "cors",
+          "navigate",
+          "no-cors",
+          "same-origin"
+        ]
+      },
+      "RequestRedirect": {
+        "type": "string",
+        "enum": [
+          "error",
+          "follow",
+          "manual"
+        ]
+      },
+      "ReferrerPolicy": {
+        "type": "string",
+        "enum": [
+          "",
+          "no-referrer",
+          "no-referrer-when-downgrade",
+          "origin",
+          "origin-when-cross-origin",
+          "same-origin",
+          "strict-origin",
+          "strict-origin-when-cross-origin",
+          "unsafe-url"
+        ]
+      },
+      "AbortSignal": {
+        "type": "object",
+        "properties": {
+          "aborted": {
+            "type": "boolean",
+            "description": "Returns true if this AbortSignal's AbortController has signaled to abort, and false otherwise."
+          },
+          "reason": {},
+          "onabort": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "isFunction": {
+                    "type": "boolean",
+                    "const": true
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "required": [
+          "aborted",
+          "reason",
+          "onabort"
+        ],
+        "additionalProperties": false,
+        "description": "A signal object that allows you to communicate with a DOM request (such as a Fetch) and abort it if required via an AbortController object."
+      },
+      "RequestInit": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/BodyInit"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A BodyInit object or null to set request's body."
+          },
+          "cache": {
+            "$ref": "#/definitions/RequestCache",
+            "description": "A string indicating how the request will interact with the browser's cache to set request's cache."
+          },
+          "credentials": {
+            "$ref": "#/definitions/RequestCredentials",
+            "description": "A string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL. Sets request's credentials."
+          },
+          "headers": {
+            "$ref": "#/definitions/HeadersInit",
+            "description": "A Headers object, an object literal, or an array of two-item arrays to set request's headers."
+          },
+          "integrity": {
+            "type": "string",
+            "description": "A cryptographic hash of the resource to be fetched by request. Sets request's integrity."
+          },
+          "keepalive": {
+            "type": "boolean",
+            "description": "A boolean to set request's keepalive."
+          },
+          "method": {
+            "type": "string",
+            "description": "A string to set request's method."
+          },
+          "mode": {
+            "$ref": "#/definitions/RequestMode",
+            "description": "A string to indicate whether the request will use CORS, or will be restricted to same-origin URLs. Sets request's mode."
+          },
+          "redirect": {
+            "$ref": "#/definitions/RequestRedirect",
+            "description": "A string indicating whether request follows redirects, results in an error upon encountering a redirect, or returns the redirect (in an opaque fashion). Sets request's redirect."
+          },
+          "referrer": {
+            "type": "string",
+            "description": "A string whose value is a same-origin URL, \"about:client\", or the empty string, to set request's referrer."
+          },
+          "referrerPolicy": {
+            "$ref": "#/definitions/ReferrerPolicy",
+            "description": "A referrer policy to set request's referrerPolicy."
+          },
+          "signal": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/AbortSignal"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "An AbortSignal to set request's signal."
+          },
+          "window": {
+            "type": "null",
+            "description": "Can only be null. Used to disassociate request from any Window."
+          }
+        },
+        "additionalProperties": false
+      },
+      "BodyInit": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/ReadableStream"
+          },
+          {
+            "$ref": "#/definitions/XMLHttpRequestBodyInit"
+          }
+        ]
+      },
+      "ReadableStream": {
+        "type": "object",
+        "properties": {
+          "locked": {
+            "type": "boolean",
+            "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/locked)"
+          }
+        },
+        "required": [
+          "locked"
+        ],
+        "additionalProperties": false,
+        "description": "This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream)"
+      },
+      "XMLHttpRequestBodyInit": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/Blob"
+          },
+          {
+            "$ref": "#/definitions/BufferSource"
+          },
+          {
+            "$ref": "#/definitions/FormData"
+          },
+          {
+            "$ref": "#/definitions/URLSearchParams"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "Blob": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "number",
+            "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/size)"
+          },
+          "type": {
+            "type": "string",
+            "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/type)"
+          }
+        },
+        "required": [
+          "size",
+          "type"
+        ],
+        "additionalProperties": false,
+        "description": "A file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob)"
+      },
+      "BufferSource": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/ArrayBufferView"
+          },
+          {
+            "$ref": "#/definitions/ArrayBuffer"
+          }
+        ]
+      },
+      "ArrayBufferView": {
+        "type": "object",
+        "properties": {
+          "buffer": {
+            "$ref": "#/definitions/ArrayBufferLike"
+          },
+          "byteLength": {
+            "type": "number"
+          },
+          "byteOffset": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "buffer",
+          "byteLength",
+          "byteOffset"
+        ],
+        "additionalProperties": false
+      },
+      "ArrayBufferLike": {
+        "$ref": "#/definitions/ArrayBuffer"
+      },
+      "ArrayBuffer": {
+        "type": "object",
+        "properties": {
+          "byteLength": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "byteLength"
+        ],
+        "additionalProperties": false
+      },
+      "FormData": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "URLSearchParams": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "HeadersInit": {
+        "anyOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          {
+            "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
+          },
+          {
+            "$ref": "#/definitions/Headers"
+          }
+        ]
+      },
+      "Record<string,string>": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "namedParameters": {
+      "modelName": "SchemaItem",
+      "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/fetchWithTimeout.ts",
+      "name": "NamedParameters<typeof fetchTextWithTimeout>",
+      "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/fetchWithTimeout.ts",
+      "operationRelativePath": "src/fetchWithTimeout.ts",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$ref": "#/definitions/NamedParameters%3Ctypeof%20fetchTextWithTimeout%3E",
+        "definitions": {
+          "NamedParameters<typeof fetchTextWithTimeout>": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/definitions/Request"
+                  },
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                ]
+              },
+              "init": {
+                "$ref": "#/definitions/RequestInit"
+              },
+              "timeoutMs": {
+                "type": "number"
+              },
+              "isNoText": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "input"
+            ],
+            "additionalProperties": false
+          },
+          "Request": {
+            "type": "object",
+            "properties": {
+              "body": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/ReadableStream%3CUint8Array%3E"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/body)"
+              },
+              "bodyUsed": {
+                "type": "boolean",
+                "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/bodyUsed)"
+              },
+              "cache": {
+                "$ref": "#/definitions/RequestCache",
+                "description": "Returns the cache mode associated with request, which is a string indicating how the request will interact with the browser's cache when fetching.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/cache)"
+              },
+              "credentials": {
+                "$ref": "#/definitions/RequestCredentials",
+                "description": "Returns the credentials mode associated with request, which is a string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/credentials)"
+              },
+              "destination": {
+                "$ref": "#/definitions/RequestDestination",
+                "description": "Returns the kind of resource requested by request, e.g., \"document\" or \"script\".\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/destination)"
+              },
+              "headers": {
+                "$ref": "#/definitions/Headers",
+                "description": "Returns a Headers object consisting of the headers associated with request. Note that headers added in the network layer by the user agent will not be accounted for in this object, e.g., the \"Host\" header.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/headers)"
+              },
+              "integrity": {
+                "type": "string",
+                "description": "Returns request's subresource integrity metadata, which is a cryptographic hash of the resource being fetched. Its value consists of multiple hashes separated by whitespace. [SRI]\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/integrity)"
+              },
+              "keepalive": {
+                "type": "boolean",
+                "description": "Returns a boolean indicating whether or not request can outlive the global in which it was created.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/keepalive)"
+              },
+              "method": {
+                "type": "string",
+                "description": "Returns request's HTTP method, which is \"GET\" by default.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/method)"
+              },
+              "mode": {
+                "$ref": "#/definitions/RequestMode",
+                "description": "Returns the mode associated with request, which is a string indicating whether the request will use CORS, or will be restricted to same-origin URLs.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/mode)"
+              },
+              "redirect": {
+                "$ref": "#/definitions/RequestRedirect",
+                "description": "Returns the redirect mode associated with request, which is a string indicating how redirects for the request will be handled during fetching. A request will follow redirects by default.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/redirect)"
+              },
+              "referrer": {
+                "type": "string",
+                "description": "Returns the referrer of request. Its value can be a same-origin URL if explicitly set in init, the empty string to indicate no referrer, and \"about:client\" when defaulting to the global's default. This is used during fetching to determine the value of the `Referer` header of the request being made.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/referrer)"
+              },
+              "referrerPolicy": {
+                "$ref": "#/definitions/ReferrerPolicy",
+                "description": "Returns the referrer policy associated with request. This is used during fetching to compute the value of the request's referrer.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/referrerPolicy)"
+              },
+              "signal": {
+                "$ref": "#/definitions/AbortSignal",
+                "description": "Returns the signal associated with request, which is an AbortSignal object indicating whether or not request has been aborted, and its abort event handler.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/signal)"
+              },
+              "url": {
+                "type": "string",
+                "description": "Returns the URL of request as a string.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/url)"
+              }
+            },
+            "required": [
+              "body",
+              "bodyUsed",
+              "cache",
+              "credentials",
+              "destination",
+              "headers",
+              "integrity",
+              "keepalive",
+              "method",
+              "mode",
+              "redirect",
+              "referrer",
+              "referrerPolicy",
+              "signal",
+              "url"
+            ],
+            "additionalProperties": false,
+            "description": "This Fetch API interface represents a resource request.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Request)"
+          },
+          "ReadableStream<Uint8Array>": {
+            "type": "object",
+            "properties": {
+              "locked": {
+                "type": "boolean",
+                "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/locked)"
+              }
+            },
+            "required": [
+              "locked"
+            ],
+            "additionalProperties": false,
+            "description": "This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream)"
+          },
+          "RequestCache": {
+            "type": "string",
+            "enum": [
+              "default",
+              "force-cache",
+              "no-cache",
+              "no-store",
+              "only-if-cached",
+              "reload"
+            ]
+          },
+          "RequestCredentials": {
+            "type": "string",
+            "enum": [
+              "include",
+              "omit",
+              "same-origin"
+            ]
+          },
+          "RequestDestination": {
+            "type": "string",
+            "enum": [
+              "",
+              "audio",
+              "audioworklet",
+              "document",
+              "embed",
+              "font",
+              "frame",
+              "iframe",
+              "image",
+              "manifest",
+              "object",
+              "paintworklet",
+              "report",
+              "script",
+              "sharedworker",
+              "style",
+              "track",
+              "video",
+              "worker",
+              "xslt"
+            ]
+          },
+          "Headers": {
+            "type": "object",
+            "additionalProperties": false
+          },
+          "RequestMode": {
+            "type": "string",
+            "enum": [
+              "cors",
+              "navigate",
+              "no-cors",
+              "same-origin"
+            ]
+          },
+          "RequestRedirect": {
+            "type": "string",
+            "enum": [
+              "error",
+              "follow",
+              "manual"
+            ]
+          },
+          "ReferrerPolicy": {
+            "type": "string",
+            "enum": [
+              "",
+              "no-referrer",
+              "no-referrer-when-downgrade",
+              "origin",
+              "origin-when-cross-origin",
+              "same-origin",
+              "strict-origin",
+              "strict-origin-when-cross-origin",
+              "unsafe-url"
+            ]
+          },
+          "AbortSignal": {
+            "type": "object",
+            "properties": {
+              "aborted": {
+                "type": "boolean",
+                "description": "Returns true if this AbortSignal's AbortController has signaled to abort, and false otherwise."
+              },
+              "reason": {},
+              "onabort": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "isFunction": {
+                        "type": "boolean",
+                        "const": true
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "required": [
+              "aborted",
+              "reason",
+              "onabort"
+            ],
+            "additionalProperties": false,
+            "description": "A signal object that allows you to communicate with a DOM request (such as a Fetch) and abort it if required via an AbortController object."
+          },
+          "RequestInit": {
+            "type": "object",
+            "properties": {
+              "body": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/BodyInit"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "A BodyInit object or null to set request's body."
+              },
+              "cache": {
+                "$ref": "#/definitions/RequestCache",
+                "description": "A string indicating how the request will interact with the browser's cache to set request's cache."
+              },
+              "credentials": {
+                "$ref": "#/definitions/RequestCredentials",
+                "description": "A string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL. Sets request's credentials."
+              },
+              "headers": {
+                "$ref": "#/definitions/HeadersInit",
+                "description": "A Headers object, an object literal, or an array of two-item arrays to set request's headers."
+              },
+              "integrity": {
+                "type": "string",
+                "description": "A cryptographic hash of the resource to be fetched by request. Sets request's integrity."
+              },
+              "keepalive": {
+                "type": "boolean",
+                "description": "A boolean to set request's keepalive."
+              },
+              "method": {
+                "type": "string",
+                "description": "A string to set request's method."
+              },
+              "mode": {
+                "$ref": "#/definitions/RequestMode",
+                "description": "A string to indicate whether the request will use CORS, or will be restricted to same-origin URLs. Sets request's mode."
+              },
+              "redirect": {
+                "$ref": "#/definitions/RequestRedirect",
+                "description": "A string indicating whether request follows redirects, results in an error upon encountering a redirect, or returns the redirect (in an opaque fashion). Sets request's redirect."
+              },
+              "referrer": {
+                "type": "string",
+                "description": "A string whose value is a same-origin URL, \"about:client\", or the empty string, to set request's referrer."
+              },
+              "referrerPolicy": {
+                "$ref": "#/definitions/ReferrerPolicy",
+                "description": "A referrer policy to set request's referrerPolicy."
+              },
+              "signal": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/AbortSignal"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "An AbortSignal to set request's signal."
+              },
+              "window": {
+                "type": "null",
+                "description": "Can only be null. Used to disassociate request from any Window."
+              }
+            },
+            "additionalProperties": false
+          },
+          "BodyInit": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/ReadableStream"
+              },
+              {
+                "$ref": "#/definitions/XMLHttpRequestBodyInit"
+              }
+            ]
+          },
+          "ReadableStream": {
+            "type": "object",
+            "properties": {
+              "locked": {
+                "type": "boolean",
+                "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/locked)"
+              }
+            },
+            "required": [
+              "locked"
+            ],
+            "additionalProperties": false,
+            "description": "This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream)"
+          },
+          "XMLHttpRequestBodyInit": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/Blob"
+              },
+              {
+                "$ref": "#/definitions/BufferSource"
+              },
+              {
+                "$ref": "#/definitions/FormData"
+              },
+              {
+                "$ref": "#/definitions/URLSearchParams"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "Blob": {
+            "type": "object",
+            "properties": {
+              "size": {
+                "type": "number",
+                "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/size)"
+              },
+              "type": {
+                "type": "string",
+                "description": "[MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/type)"
+              }
+            },
+            "required": [
+              "size",
+              "type"
+            ],
+            "additionalProperties": false,
+            "description": "A file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob)"
+          },
+          "BufferSource": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/ArrayBufferView"
+              },
+              {
+                "$ref": "#/definitions/ArrayBuffer"
+              }
+            ]
+          },
+          "ArrayBufferView": {
+            "type": "object",
+            "properties": {
+              "buffer": {
+                "$ref": "#/definitions/ArrayBufferLike"
+              },
+              "byteLength": {
+                "type": "number"
+              },
+              "byteOffset": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "buffer",
+              "byteLength",
+              "byteOffset"
+            ],
+            "additionalProperties": false
+          },
+          "ArrayBufferLike": {
+            "$ref": "#/definitions/ArrayBuffer"
+          },
+          "ArrayBuffer": {
+            "type": "object",
+            "properties": {
+              "byteLength": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "byteLength"
+            ],
+            "additionalProperties": false
+          },
+          "FormData": {
+            "type": "object",
+            "additionalProperties": false
+          },
+          "URLSearchParams": {
+            "type": "object",
+            "additionalProperties": false
+          },
+          "HeadersInit": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              },
+              {
+                "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
+              },
+              {
+                "$ref": "#/definitions/Headers"
+              }
+            ]
+          },
+          "Record<string,string>": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "parameters": [
+      {
+        "name": "input",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/Request"
+            },
+            {
+              "type": "string",
+              "format": "uri"
+            }
+          ]
+        },
+        "simplifiedSchema": {
+          "properties": [],
+          "type": "object"
+        },
+        "required": true
+      },
+      {
+        "name": "init",
+        "schema": {
+          "$ref": "#/definitions/RequestInit"
+        },
+        "simplifiedSchema": {
+          "fullComment": "",
+          "properties": [
+            {
+              "name": "body",
+              "required": false,
+              "schema": {
+                "fullComment": "A BodyInit object or null to set request's body.",
+                "properties": [],
+                "type": "object"
+              }
+            },
+            {
+              "name": "cache",
+              "required": false,
+              "schema": {
+                "enum": [
+                  "default",
+                  "force-cache",
+                  "no-cache",
+                  "no-store",
+                  "only-if-cached",
+                  "reload"
+                ],
+                "fullComment": "A string indicating how the request will interact with the browser's cache to set request's cache.\n\n",
+                "type": "string"
+              }
+            },
+            {
+              "name": "credentials",
+              "required": false,
+              "schema": {
+                "enum": [
+                  "include",
+                  "omit",
+                  "same-origin"
+                ],
+                "fullComment": "A string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL. Sets request's credentials.\n\n",
+                "type": "string"
+              }
+            },
+            {
+              "name": "headers",
+              "required": false,
+              "schema": {
+                "fullComment": "A Headers object, an object literal, or an array of two-item arrays to set request's headers.\n\n",
+                "properties": [],
+                "type": "object"
+              }
+            },
+            {
+              "name": "integrity",
+              "required": false,
+              "schema": {
+                "fullComment": "A cryptographic hash of the resource to be fetched by request. Sets request's integrity.",
+                "type": "string"
+              }
+            },
+            {
+              "name": "keepalive",
+              "required": false,
+              "schema": {
+                "fullComment": "A boolean to set request's keepalive.",
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "method",
+              "required": false,
+              "schema": {
+                "fullComment": "A string to set request's method.",
+                "type": "string"
+              }
+            },
+            {
+              "name": "mode",
+              "required": false,
+              "schema": {
+                "enum": [
+                  "cors",
+                  "navigate",
+                  "no-cors",
+                  "same-origin"
+                ],
+                "fullComment": "A string to indicate whether the request will use CORS, or will be restricted to same-origin URLs. Sets request's mode.\n\n",
+                "type": "string"
+              }
+            },
+            {
+              "name": "redirect",
+              "required": false,
+              "schema": {
+                "enum": [
+                  "error",
+                  "follow",
+                  "manual"
+                ],
+                "fullComment": "A string indicating whether request follows redirects, results in an error upon encountering a redirect, or returns the redirect (in an opaque fashion). Sets request's redirect.\n\n",
+                "type": "string"
+              }
+            },
+            {
+              "name": "referrer",
+              "required": false,
+              "schema": {
+                "fullComment": "A string whose value is a same-origin URL, \"about:client\", or the empty string, to set request's referrer.",
+                "type": "string"
+              }
+            },
+            {
+              "name": "referrerPolicy",
+              "required": false,
+              "schema": {
+                "enum": [
+                  "",
+                  "no-referrer",
+                  "no-referrer-when-downgrade",
+                  "origin",
+                  "origin-when-cross-origin",
+                  "same-origin",
+                  "strict-origin",
+                  "strict-origin-when-cross-origin",
+                  "unsafe-url"
+                ],
+                "fullComment": "A referrer policy to set request's referrerPolicy.\n\n",
+                "type": "string"
+              }
+            },
+            {
+              "name": "signal",
+              "required": false,
+              "schema": {
+                "fullComment": "An AbortSignal to set request's signal.",
+                "properties": [],
+                "type": "object"
+              }
+            },
+            {
+              "name": "window",
+              "required": false,
+              "schema": {
+                "fullComment": "Can only be null. Used to disassociate request from any Window.",
+                "type": "null"
+              }
+            }
+          ],
+          "type": "object"
+        },
+        "required": false
+      },
+      {
+        "name": "timeoutMs",
+        "schema": {
+          "type": "number"
+        },
+        "simplifiedSchema": {
+          "type": "number"
+        },
+        "required": false
+      },
+      {
+        "name": "isNoText",
+        "schema": {
+          "type": "boolean"
+        },
+        "simplifiedSchema": {
+          "type": "boolean"
+        },
+        "required": false
+      }
+    ]
+  },
+  {
+    "modelName": "SwcFunction",
+    "name": "cli",
+    "start": 147,
+    "end": 1411,
+    "length": 1264,
+    "raw": "const cli = async () => {\n  // e.g. npx openapi-fetch-typescript https://guest163.actionschema.com/openapi.json /path/to/file [clientName]\n  const [openapiUrlOrPath, pathToOutputFile] = process.argv.slice(2) as (\n    | string\n    | undefined\n  )[];\n\n  if (!openapiUrlOrPath) {\n    console.log(\"Please provide an URL as the first argument\");\n    return;\n  }\n\n  const usage = `Usage: npx openapi-fetch-typescript [openapi-url or path] [output-path]`;\n  if (openapiUrlOrPath === \"--help\" || openapiUrlOrPath === \"-h\") {\n    console.log(usage);\n    return;\n  }\n\n  const cwd = process.cwd();\n  const absolutePath = pathToOutputFile?.startsWith(\"/\")\n    ? pathToOutputFile\n    : pathToOutputFile\n      ? path.join(cwd, pathToOutputFile)\n      : path.join(cwd, \"types.ts\");\n\n  const absoluteFolderPath = path.parse(absolutePath).dir;\n\n  if (!fs.existsSync(absoluteFolderPath)) {\n    console.log(\"Output folder doesn't exist\", absoluteFolderPath);\n    return;\n  }\n\n  const { isSuccessful, message, result } = await generateTypescriptSdk({\n    openapiUrlOrPath,\n    cwd,\n  });\n\n  if (!isSuccessful || !result) {\n    console.log({ isSuccessful, message });\n    return;\n  }\n\n  fs.writeFileSync(absolutePath, result, \"utf8\");\n  console.log(\"DONE writing to\", absolutePath);\n};",
+    "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/generateTypescriptSdk.cli.ts",
+    "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/generateTypescriptSdk.cli.ts",
+    "isExported": false,
+    "packageCategory": "actionschema",
+    "packageName": "openapi-fetch-typescript",
+    "operationClassification": "cjs",
+    "returnType": {},
+    "otherDefs": {},
+    "namedParameters": {
+      "modelName": "SchemaItem",
+      "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/generateTypescriptSdk.cli.ts",
+      "name": "NamedParameters<typeof cli>",
+      "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/generateTypescriptSdk.cli.ts",
+      "operationRelativePath": "src/generateTypescriptSdk.cli.ts",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$ref": "#/definitions/NamedParameters%3Ctypeof%20cli%3E",
+        "definitions": {
+          "NamedParameters<typeof cli>": {
+            "type": "object",
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  },
+  {
+    "modelName": "SwcVariable",
+    "name": "httpMethods",
+    "start": 230,
+    "end": 348,
+    "length": 118,
+    "raw": "const httpMethods = [\n  \"post\",\n  \"get\",\n  \"put\",\n  \"patch\",\n  \"delete\",\n  \"options\",\n  \"head\",\n  \"trace\",\n] as const;",
+    "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/generateTypescriptSdk.ts",
+    "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/generateTypescriptSdk.ts",
+    "isExported": false,
+    "packageCategory": "actionschema",
+    "packageName": "openapi-fetch-typescript",
+    "operationClassification": "cjs"
+  },
+  {
+    "modelName": "SwcInterface",
+    "name": "HttpMethod",
+    "start": 349,
+    "end": 396,
+    "raw": "type HttpMethod = (typeof httpMethods)[number];",
+    "length": 47,
+    "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/generateTypescriptSdk.ts",
+    "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/generateTypescriptSdk.ts",
+    "isExported": false,
+    "packageCategory": "actionschema",
+    "packageName": "openapi-fetch-typescript",
+    "operationClassification": "cjs",
+    "type": {
+      "isArray": false,
+      "isEnum": false,
+      "isEnumLiteral": false,
+      "isObject": false,
+      "isPrimitive": false,
+      "rawType": "",
+      "typeCoverage": 0,
+      "typeDefinition": {
+        "type": "string",
+        "enum": [
+          "post",
+          "get",
+          "put",
+          "patch",
+          "delete",
+          "options",
+          "head",
+          "trace"
+        ]
+      },
+      "simplifiedSchema": {
+        "enum": [
+          "post",
+          "get",
+          "put",
+          "patch",
+          "delete",
+          "options",
+          "head",
+          "trace"
+        ],
+        "type": "string"
+      }
+    }
+  },
+  {
+    "modelName": "SwcFunction",
+    "name": "generateTypescriptSdk",
+    "start": 493,
+    "end": 2733,
+    "length": 2240,
+    "raw": "export const generateTypescriptSdk = async (context: {\n  openapiUrlOrPath: string;\n  cwd?: string;\n}) => {\n  const { openapiUrlOrPath, cwd } = context;\n\n  const isUrl = URL.canParse(openapiUrlOrPath);\n\n  const openapiResult = isUrl\n    ? {\n        isSuccessful: true,\n        message: \"Fetched\",\n        result: await fetchOpenapi(openapiUrlOrPath),\n      }\n    : await parseOpenapiFromFile(openapiUrlOrPath, cwd);\n\n  if (!openapiResult.result) {\n    return { isSuccessful: false, message: openapiResult.message };\n  }\n\n  const openapi = openapiResult.result;\n\n  const schemaKeys = openapi.components?.schemas\n    ? Object.keys(openapi.components.schemas)\n    : undefined;\n\n  const ast = await openapiTS(openapi, {});\n  const contents = astToString(ast);\n\n  const pathKeys = openapi?.paths ? Object.keys(openapi.paths) : [];\n  const operationIds = pathKeys\n    .map((path) => {\n      const methods = !!openapi?.paths?.[path]\n        ? Object.keys(openapi.paths[path]!).filter((method) =>\n            ([...httpMethods] as string[]).includes(method),\n          )\n        : [];\n\n      const operationIds = methods.map((method) => {\n        // 1) Get the operation Id\n        const pathItemObject = openapi?.paths?.[path] as\n          | PathItemObject\n          | undefined;\n        const operationObject = pathItemObject?.[method as HttpMethod] as\n          | OperationObject\n          | undefined;\n        const operationId = operationObject?.operationId || `${method}:${path}`;\n\n        return { path, method, operationId };\n      });\n      return operationIds;\n    })\n    .flat();\n\n  const operationUrlObject = operationIds\n    .map(({ method, operationId, path }) => ({\n      [operationId]: { method, path },\n    }))\n    .reduce((previous, current) => {\n      return { ...previous, ...current };\n    }, {});\n\n  // console.log({ operationUrlObject });\n\n  const result = `${contents}\n\n${schemaKeys\n  ?.map((key) => {\n    return `export type ${key} = components[\"schemas\"][\"${key}\"]`;\n  })\n  .join(\"\\n\")}\n  \nexport const operationUrlObject = ${JSON.stringify(\n    operationUrlObject,\n    undefined,\n    2,\n  )}\nexport const operationKeys = Object.keys(operationUrlObject);`;\n  return { isSuccessful: true, message: \"Made script\", result };\n};",
+    "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/generateTypescriptSdk.ts",
+    "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/generateTypescriptSdk.ts",
+    "isExported": true,
+    "packageCategory": "actionschema",
+    "packageName": "openapi-fetch-typescript",
+    "operationClassification": "cjs",
+    "config": {
+      "isPublic": true
+    },
+    "returnType": {},
+    "otherDefs": {},
+    "namedParameters": {
+      "modelName": "SchemaItem",
+      "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/generateTypescriptSdk.ts",
+      "name": "NamedParameters<typeof generateTypescriptSdk>",
+      "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/generateTypescriptSdk.ts",
+      "operationRelativePath": "src/generateTypescriptSdk.ts",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$ref": "#/definitions/NamedParameters%3Ctypeof%20generateTypescriptSdk%3E",
+        "definitions": {
+          "NamedParameters<typeof generateTypescriptSdk>": {
+            "type": "object",
+            "properties": {
+              "context": {
+                "type": "object",
+                "properties": {
+                  "openapiUrlOrPath": {
+                    "type": "string"
+                  },
+                  "cwd": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "openapiUrlOrPath"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "context"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "parameters": [
+      {
+        "name": "context",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "openapiUrlOrPath": {
+              "type": "string"
+            },
+            "cwd": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "openapiUrlOrPath"
+          ],
+          "additionalProperties": false
+        },
+        "simplifiedSchema": {
+          "properties": [
+            {
+              "name": "openapiUrlOrPath",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "cwd",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "type": "object"
+        },
+        "required": true
+      }
+    ]
+  },
+  {
+    "modelName": "SwcFunction",
+    "name": "getAbsolutePath",
+    "start": 205,
+    "end": 626,
+    "length": 421,
+    "raw": "export const getAbsolutePath = (\n  absoluteOrRelativePath: string,\n  cwd?: string,\n) => {\n  if (path.isAbsolute(absoluteOrRelativePath)) {\n    if (fs.existsSync(absoluteOrRelativePath)) {\n      return absoluteOrRelativePath;\n    }\n    return;\n  }\n\n  if (!cwd) {\n    return;\n  }\n\n  const absolutePath = path.join(cwd, absoluteOrRelativePath);\n  if (fs.existsSync(absolutePath)) {\n    return absolutePath;\n  }\n\n  return;\n};",
+    "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/getAbsolutePath.ts",
+    "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/getAbsolutePath.ts",
+    "isExported": true,
+    "packageCategory": "actionschema",
+    "packageName": "openapi-fetch-typescript",
+    "operationClassification": "cjs",
+    "returnType": {},
+    "otherDefs": {},
+    "namedParameters": {
+      "modelName": "SchemaItem",
+      "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/getAbsolutePath.ts",
+      "name": "NamedParameters<typeof getAbsolutePath>",
+      "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/getAbsolutePath.ts",
+      "operationRelativePath": "src/getAbsolutePath.ts",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$ref": "#/definitions/NamedParameters%3Ctypeof%20getAbsolutePath%3E",
+        "definitions": {
+          "NamedParameters<typeof getAbsolutePath>": {
+            "type": "object",
+            "properties": {
+              "absoluteOrRelativePath": {
+                "type": "string"
+              },
+              "cwd": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "absoluteOrRelativePath"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "parameters": [
+      {
+        "name": "absoluteOrRelativePath",
+        "schema": {
+          "type": "string"
+        },
+        "simplifiedSchema": {
+          "type": "string"
+        },
+        "required": true
+      },
+      {
+        "name": "cwd",
+        "schema": {
+          "type": "string"
+        },
+        "simplifiedSchema": {
+          "type": "string"
+        },
+        "required": false
+      }
+    ]
+  },
+  {
+    "modelName": "SwcFunction",
+    "name": "parseOpenapiFromFile",
+    "start": 242,
+    "end": 838,
+    "length": 596,
+    "raw": "export const parseOpenapiFromFile = async (\n  absoluteOrRelativePath: string,\n  cwd?: string,\n) => {\n  const absolutePath = getAbsolutePath(absoluteOrRelativePath, cwd);\n  if (!absolutePath) {\n    return { isSuccessful: false, message: \"Couldn't find file\" };\n  }\n\n  const yamlOrJson = fs.readFileSync(absolutePath, \"utf8\");\n\n  const json =\n    tryParseJson<OpenAPI3>(yamlOrJson) ||\n    tryParseYamlToJson<OpenAPI3>(yamlOrJson);\n\n  if (!json) {\n    return { isSuccessful: false, message: \"File could not be parsed\" };\n  }\n\n  return { isSuccessful: true, message: \"Parsed file\", result: json };\n};",
+    "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/parseOpenapiFromFile.ts",
+    "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/parseOpenapiFromFile.ts",
+    "isExported": true,
+    "packageCategory": "actionschema",
+    "packageName": "openapi-fetch-typescript",
+    "operationClassification": "cjs",
+    "returnType": {},
+    "otherDefs": {},
+    "namedParameters": {
+      "modelName": "SchemaItem",
+      "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/parseOpenapiFromFile.ts",
+      "name": "NamedParameters<typeof parseOpenapiFromFile>",
+      "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/parseOpenapiFromFile.ts",
+      "operationRelativePath": "src/parseOpenapiFromFile.ts",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$ref": "#/definitions/NamedParameters%3Ctypeof%20parseOpenapiFromFile%3E",
+        "definitions": {
+          "NamedParameters<typeof parseOpenapiFromFile>": {
+            "type": "object",
+            "properties": {
+              "absoluteOrRelativePath": {
+                "type": "string"
+              },
+              "cwd": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "absoluteOrRelativePath"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "parameters": [
+      {
+        "name": "absoluteOrRelativePath",
+        "schema": {
+          "type": "string"
+        },
+        "simplifiedSchema": {
+          "type": "string"
+        },
+        "required": true
+      },
+      {
+        "name": "cwd",
+        "schema": {
+          "type": "string"
+        },
+        "simplifiedSchema": {
+          "type": "string"
+        },
+        "required": false
+      }
+    ]
+  },
+  {
+    "modelName": "SwcVariable",
+    "name": "removeCommentsRegex",
+    "start": 0,
+    "end": 77,
+    "length": 77,
+    "raw": "const removeCommentsRegex = /\\\\\"|\"(?:\\\\\"|[^\"])*\"|(\\/\\/.*|\\/\\*[\\s\\S]*?\\*\\/)/g;",
+    "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/tryParseJson.ts",
+    "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/tryParseJson.ts",
+    "isExported": false,
+    "packageCategory": "actionschema",
+    "packageName": "openapi-fetch-typescript",
+    "operationClassification": "cjs"
+  },
+  {
+    "modelName": "SwcFunction",
+    "name": "tryParseJson",
+    "start": 123,
+    "end": 528,
+    "length": 405,
+    "raw": "export const tryParseJson = <T extends unknown>(\n  text: string,\n  logParseError?: boolean,\n): T | null => {\n  try {\n    const jsonStringWithoutComments = text.replace(\n      removeCommentsRegex,\n      (m, g) => (g ? \"\" : m),\n    );\n    return JSON.parse(jsonStringWithoutComments) as T;\n  } catch (parseError) {\n    if (logParseError) console.log(\"JSON Parse error:\", parseError);\n    return null;\n  }\n};",
+    "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/tryParseJson.ts",
+    "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/tryParseJson.ts",
+    "isExported": true,
+    "packageCategory": "actionschema",
+    "packageName": "openapi-fetch-typescript",
+    "operationClassification": "cjs",
+    "returnType": {},
+    "otherDefs": {},
+    "namedParameters": {
+      "modelName": "SchemaItem",
+      "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/tryParseJson.ts",
+      "name": "NamedParameters<typeof tryParseJson>",
+      "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/tryParseJson.ts",
+      "operationRelativePath": "src/tryParseJson.ts",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$ref": "#/definitions/NamedParameters%3Ctypeof%20tryParseJson%3E",
+        "definitions": {
+          "NamedParameters<typeof tryParseJson>": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "logParseError": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "parameters": [
+      {
+        "name": "text",
+        "schema": {
+          "type": "string"
+        },
+        "simplifiedSchema": {
+          "type": "string"
+        },
+        "required": true
+      },
+      {
+        "name": "logParseError",
+        "schema": {
+          "type": "boolean"
+        },
+        "simplifiedSchema": {
+          "type": "boolean"
+        },
+        "required": false
+      }
+    ]
+  },
+  {
+    "modelName": "SwcFunction",
+    "name": "tryParseYamlToJson",
+    "start": 119,
+    "end": 417,
+    "length": 298,
+    "raw": "export const tryParseYamlToJson = <T = any>(yamlString: string): T | null => {\n  // Get document, or throw exception on error\n  try {\n    const document = load(yamlString);\n    return document as T;\n  } catch (e: any) {\n    // console.log(\"failed parsing yaml\", e?.message);\n    return null;\n  }\n};",
+    "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/tryParseYamlToJson.ts",
+    "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/tryParseYamlToJson.ts",
+    "isExported": true,
+    "packageCategory": "actionschema",
+    "packageName": "openapi-fetch-typescript",
+    "operationClassification": "cjs",
+    "returnType": {},
+    "otherDefs": {},
+    "namedParameters": {
+      "modelName": "SchemaItem",
+      "projectRelativePath": "packages/actionschema/openapi-fetch-typescript/src/tryParseYamlToJson.ts",
+      "name": "NamedParameters<typeof tryParseYamlToJson>",
+      "absolutePath": "/Users/king/Desktop/github/os/packages/actionschema/openapi-fetch-typescript/src/tryParseYamlToJson.ts",
+      "operationRelativePath": "src/tryParseYamlToJson.ts",
+      "schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$ref": "#/definitions/NamedParameters%3Ctypeof%20tryParseYamlToJson%3E",
+        "definitions": {
+          "NamedParameters<typeof tryParseYamlToJson>": {
+            "type": "object",
+            "properties": {
+              "yamlString": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "yamlString"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "parameters": [
+      {
+        "name": "yamlString",
+        "schema": {
+          "type": "string"
+        },
+        "simplifiedSchema": {
+          "type": "string"
+        },
+        "required": true
+      }
+    ]
+  }
+]
