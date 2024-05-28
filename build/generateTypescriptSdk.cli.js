@@ -30,7 +30,7 @@ const cli = async () => {
         cwd,
     });
     if (!isSuccessful || !result) {
-        console.log({ isSuccessful, message });
+        console.log({ openapiUrlOrPath, cwd, isSuccessful, message, result });
         return;
     }
     fs.writeFileSync(absolutePath, result, "utf8");

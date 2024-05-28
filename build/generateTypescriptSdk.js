@@ -15,12 +15,15 @@ const httpMethods = [
 export const generateTypescriptSdk = async (context) => {
     const { openapiUrlOrPath, cwd } = context;
     const isUrl = URL.canParse(openapiUrlOrPath);
+    const fetchResult = await fetchOpenapi(openapiUrlOrPath);
     const openapiResult = isUrl
-        ? {
-            isSuccessful: true,
-            message: "Fetched",
-            result: await fetchOpenapi(openapiUrlOrPath),
-        }
+        ? fetchResult
+            ? {
+                isSuccessful: true,
+                message: "Fetched",
+                result: fetchResult,
+            }
+            : { isSuccessful: false, message: "Fetch failed" }
         : await parseOpenapiFromFile(openapiUrlOrPath, cwd);
     if (!openapiResult.result) {
         return { isSuccessful: false, message: openapiResult.message };

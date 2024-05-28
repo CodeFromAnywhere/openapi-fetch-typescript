@@ -19,15 +19,12 @@ export const fetchOpenapi = async (openapiUrl: string | undefined) => {
   const { json, status, statusText, text } = await fetchWithTimeout<OpenAPI3>(
     openapiUrl,
     {
-      headers: isYaml
-        ? undefined
-        : {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
+      headers: isYaml ? undefined : { Accept: "application/json" },
     },
     30000,
   );
+
+  console.log({ openapiUrl, json, text, status, statusText });
 
   if (json) {
     // NB: set cache
