@@ -15,7 +15,7 @@ const httpMethods = [
 export const generateTypescriptSdk = async (context) => {
     const { openapiUrlOrPath, cwd } = context;
     const isUrl = URL.canParse(openapiUrlOrPath);
-    const fetchResult = await fetchOpenapi(openapiUrlOrPath);
+    const fetchResult = isUrl ? await fetchOpenapi(openapiUrlOrPath) : undefined;
     const openapiResult = isUrl
         ? fetchResult
             ? {

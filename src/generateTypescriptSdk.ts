@@ -27,7 +27,7 @@ export const generateTypescriptSdk = async (context: {
 
   const isUrl = URL.canParse(openapiUrlOrPath);
 
-  const fetchResult = await fetchOpenapi(openapiUrlOrPath);
+  const fetchResult = isUrl ? await fetchOpenapi(openapiUrlOrPath) : undefined;
 
   const openapiResult = isUrl
     ? fetchResult
